@@ -20,10 +20,10 @@
 
 class @ECSSUtility extends EObject
   @canUseFlex:false
-  @CSS_FLEX_H:"es_h_flex_box"
-  @CSS_FLEX_V:"es_v_flex_box"
-  @CSS_CONTENT_ALIGN_CENTER:"es_flex_box_align_center" #cross access
-  @CSS_CONTENT_LOCATE_CENTER:"es_flex_box_locate_center" #locate aligned item
+  @CSS_FLEX_H:"e_h_flex_box"
+  @CSS_FLEX_V:"e_v_flex_box"
+  @CSS_CONTENT_ALIGN_CENTER:"e_flex_box_align_center" #cross access
+  @CSS_CONTENT_LOCATE_CENTER:"e_flex_box_locate_center" #locate aligned item
   ### 
   display: flex;
   display: -webkit-box;
