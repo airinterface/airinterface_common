@@ -102,8 +102,7 @@ class @EDOMUtility extends EObject
           window.oRequestAnimationFrame                ||
           window.msRequestAnimationFrame                ||
           ((callback)-> window.setTimeout(callback, 1000 / 60) )
-    @hasSupport = ( EDOMUtility.hasOwnProperty(window, "CSS")  &&   EDOMUtility.hasOwnProperty(window.CSS, "supports")
-
+    @hasSupports = ( EDOMUtility.hasOwnProperty("CSS")  &&   EDOMUtility.hasOwnProperty("supports",window.CSS))
     @getOSType()
     @isContentScrollableByCSS  = false# EDOMUtility.vOsType == EDOMUtility.osTypes.IOS)
     supportsOrientationChange = EDOMUtility.hasOwnProperty("onorientationchange") or EDOMUtility.hasOwnProperty("orientation")
@@ -379,7 +378,7 @@ class @EDOMUtility extends EObject
     
   @hasOwnProperty:(name, obj)->
     obj = window if !obj
-    if(EDOMUtility.isPropertyCheckAvailable && EDOMUtility.vOsType != EDOMUtility.osTypes.WINDOWS &&  !jQuery.browser.mozilla)
+    if(EDOMUtility.isPropertyCheckAvailable && EDOMUtility.vOsType != EDOMUtility.osTypes.WINDOWS)
       # here, some IE supports prototype hasOwnProperty, but not to overkill by comparing the version. 
       # even if hasOwnProperty, if it's on the prototype scope, it could return false
       ((`name in obj`) || window.hasOwnProperty(name))

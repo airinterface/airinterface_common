@@ -19,6 +19,7 @@
 ###
 
 class @ECSSUtility extends EObject
+  @canUseFlex:false
   ### 
   display: flex;
   display: -webkit-box;
@@ -26,26 +27,55 @@ class @ECSSUtility extends EObject
   display: -ms-flexbox;
   display: -webkit-flex;
   display: box;
-	-webkit-box-align: stretch;
-	-moz-box-align: stretch;
+  -webkit-box-align: stretch;
+  -moz-box-align: stretch;
   box-align: stretch;
-  justify-content: center; /*centers items on the line (the x-axis by default)*/
-  align-items: center; /*centers items on the cross-axis (y by default)*/
-  align-content:center; /* only multi align - default */
+  justify-content: center; /*centers items on the line (the x-axis by default)
+  align-items: center; /*centers items on the cross-axis (y by default)
+  align-content:center; /* only multi align - default 
   ### 
-  @hasSupport:null
 
   @normalizeCSS:()->
-    @_normalizeFlex()
+    css = ""
+    css += @_normalizeFlex()
+    @addCSS(css)
 
-  @vSupport:(param)->
-    if @hasSupport == null 
-      @hasSupport = ( EDOMUtility.hasOwnProperty(window, "CSS")  &&   EDOMUtility.hasOwnProperty(window.CSS, "support")
-
+  @addCSS:(css)->
+    document.write("<style>#{css}</style>")
+    ###
+    e = document.createElement('style')
+    e.type = 'text/css'
+    if e.styleSheet
+      e.styleSheet.cssText = css
+    else
+      e.appendChild(document.createTextNode(css))
+    head.appendChild(e)
+    ###
     
   @_normalizeFlex:()->
-    #res = {display:"flex"}
-    #if( EDOMUtility.hasOwnProperty(window, "CSS")  &&   EDOMUtility.hasOwnProperty(window.CSS, "support")
+    #reference: http://stackoverflow.com/questions/16280040/css3-flexbox-display-box-vs-flexbox-vs-flex
+    css = ""
+    if EDOMUtility.hasSupports
+      @canUseFlex = window.CSS.supports("display","flex")
+    if @canUseFlex
+      css += ".es_h_flex_box,.es_v_flex_box { display: flex;}
+              .es_h_flex_box{ flex-direction: row }
+              .es_v_flex_box{ flex-direction: column }
+             "
+    else if EDOMUtility.hasOwnProperty("#{EDOMUtility.vBrowserType}BoxFlex",document.createElement("div").style) #ignoring flexbox
+      css += ".es_h_flex_box,.es_v_flex_box { display: #{EDOMUtility.vP}box;}
+              .es_h_flex_box{ #{EDOMUtility.vP}box-orient: horizontal; box-orient:horizontal;} 
+              .es_v_flex_box{ #{EDOMUtility.vP}box-orient: vertical; box-orient:vertical; }  
+              "
+    else
+      #Internet Explorer 10
+      css += ".es_h_flex_box,.es_v_flex_box { display: #{EDOMUtility.vP}box-flex;}
+              .es_h_flex_box{ #{EDOMUtility.vP}flex-direction: row } 
+              .es_v_flex_box{ #{EDOMUtility.vP}flex-direction: column }  
+              "
+    css
+    
+ECSSUtility.normalizeCSS()
 
 
 
