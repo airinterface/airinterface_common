@@ -150,10 +150,12 @@ class @EDOMUtility extends EObject
        @vEvUserScrollEnd = 'wheel'
        @vEvMouseWheel='wheel'
 
-    if EDOMUtility.hasOwnProperty('DOMMouseScroll')
+    else if EDOMUtility.hasOwnProperty('DOMMouseScroll')
        @vEvUserMoveEndAll.push('DOMMouseScroll')
        @vEvUserScrollEnd = 'DOMMouseScroll'
        @vEvMouseWheel='DOMMouseScroll'
+
+
 
 
 

@@ -20,6 +20,10 @@
 
 class @ECSSUtility extends EObject
   @canUseFlex:false
+  @CSS_FLEX_H:"es_h_flex_box"
+  @CSS_FLEX_V:"es_v_flex_box"
+  @CSS_CONTENT_ALIGN_CENTER:"es_flex_box_align_center" #cross access
+  @CSS_CONTENT_LOCATE_CENTER:"es_flex_box_locate_center" #locate aligned item
   ### 
   display: flex;
   display: -webkit-box;
@@ -58,20 +62,50 @@ class @ECSSUtility extends EObject
     if EDOMUtility.hasSupports
       @canUseFlex = window.CSS.supports("display","flex")
     if @canUseFlex
-      css += ".es_h_flex_box,.es_v_flex_box { display: flex;}
-              .es_h_flex_box{ flex-direction: row }
-              .es_v_flex_box{ flex-direction: column }
+      css += ".#{@CSS_FLEX_H},.#{@CSS_FLEX_V} { 
+                display: flex;
+                }
+              .#{@CSS_CONTENT_ALIGN_CENTER}{
+                  align-items:center;
+                }
+              .#{@CSS_CONTENT_LOCATE_CENTER}{
+                  align-content:center;
+                  justify-content:center;
+                }
+              .#{@CSS_FLEX_H}{ flex-direction: row }
+              .#{@CSS_FLEX_V}{ flex-direction: column }
              "
     else if EDOMUtility.hasOwnProperty("#{EDOMUtility.vBrowserType}BoxFlex",document.createElement("div").style) #ignoring flexbox
-      css += ".es_h_flex_box,.es_v_flex_box { display: #{EDOMUtility.vP}box;}
-              .es_h_flex_box{ #{EDOMUtility.vP}box-orient: horizontal; box-orient:horizontal;} 
-              .es_v_flex_box{ #{EDOMUtility.vP}box-orient: vertical; box-orient:vertical; }  
+      css += ".#{@CSS_FLEX_H},.#{@CSS_FLEX_V} { 
+                display: #{EDOMUtility.vP}box;
+               }
+              .#{@CSS_CONTENT_ALIGN_CENTER}{
+                #{EDOMUtility.vP}box-align:center;
+                box-align:center;
+               }
+              .#{@CSS_CONTENT_LOCATE_CENTER}{
+                flex-align-pack:center;
+                #{EDOMUtility.vP}box-pack:center;
+                box-pack:center;
+                }
+              .#{@CSS_FLEX_H}{ #{EDOMUtility.vP}box-orient: horizontal; box-orient:horizontal;} 
+              .#{@CSS_FLEX_V}{ #{EDOMUtility.vP}box-orient: vertical; box-orient:vertical; }  
               "
     else
       #Internet Explorer 10
-      css += ".es_h_flex_box,.es_v_flex_box { display: #{EDOMUtility.vP}box-flex;}
-              .es_h_flex_box{ #{EDOMUtility.vP}flex-direction: row } 
-              .es_v_flex_box{ #{EDOMUtility.vP}flex-direction: column }  
+      css += ".#{@CSS_FLEX_H},.#{@CSS_FLEX_V} { 
+                display: #{EDOMUtility.vP}box-flex;
+                }
+              .#{@CSS_CONTENT_ALIGN_CENTER}{
+                #{EDOMUtility.vP}flex-pack: center;
+                }
+              .#{@CSS_CONTENT_LOCATE_CENTER}{
+                flex-align-pack:center;
+                #{EDOMUtility.vP}box-pack:center;
+                box-pack:center;
+                }
+              .#{@CSS_FLEX_H}{ #{EDOMUtility.vP}flex-direction: row } 
+              .#{@CSS_FLEX_V}{ #{EDOMUtility.vP}flex-direction: column }  
               "
     css
     
