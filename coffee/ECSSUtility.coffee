@@ -75,7 +75,7 @@ class @ECSSUtility extends EObject
               .#{@CSS_FLEX_H}{ flex-direction: row }
               .#{@CSS_FLEX_V}{ flex-direction: column }
              "
-    else if EDOMUtility.hasOwnProperty("#{EDOMUtility.vBrowserType}BoxFlex",document.createElement("div").style) #ignoring flexbox
+    else if !EDOMUtility.hasOwnProperty("#{EDOMUtility.vBrowserType}BoxFlex",document.createElement("div").style) #ignoring flexbox
       css += ".#{@CSS_FLEX_H},.#{@CSS_FLEX_V} { 
                 display: #{EDOMUtility.vP}box;
                }
