@@ -18,26 +18,13 @@
  * 
 ###
 
-class @ECSSUtility extends EObject
+class @ECSSUtility
   @canUseFlex:false
   @CSS_FLEX_H:"e_h_flex_box"
   @CSS_FLEX_V:"e_v_flex_box"
   @CSS_CONTENT_ALIGN_CENTER:"e_flex_box_align_center" #cross access
+  @CSS_CONTENT_ALIGN_TOP:"e_flex_box_align_top" #cross access
   @CSS_CONTENT_LOCATE_CENTER:"e_flex_box_locate_center" #locate aligned item
-  ### 
-  display: flex;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: box;
-  -webkit-box-align: stretch;
-  -moz-box-align: stretch;
-  box-align: stretch;
-  justify-content: center; /*centers items on the line (the x-axis by default)
-  align-items: center; /*centers items on the cross-axis (y by default)
-  align-content:center; /* only multi align - default 
-  ### 
 
   @normalizeCSS:()->
     css = ""
@@ -59,14 +46,36 @@ class @ECSSUtility extends EObject
   @_normalizeFlex:()->
     #reference: http://stackoverflow.com/questions/16280040/css3-flexbox-display-box-vs-flexbox-vs-flex
     css = ""
+    vendorSpecificFlex = false
     if EDOMUtility.hasSupports
       @canUseFlex = window.CSS.supports("display","flex")
-    if @canUseFlex
+      vendorSpecificFlex = CSS.supports("display","#{EDOMUtility.vP}flex")
+    if vendorSpecificFlex
+      css += ".#{@CSS_FLEX_H},.#{@CSS_FLEX_V} { 
+                display: #{EDOMUtility.vP}flex;
+                }
+              .#{@CSS_CONTENT_ALIGN_CENTER}{
+                  #{EDOMUtility.vP}align-items:center;
+                }
+              .#{@CSS_FLEX_H}.#{@CSS_CONTENT_ALIGN_CENTER}{
+                  #{EDOMUtility.vP}justify-content:center;
+                }
+              .#{@CSS_CONTENT_LOCATE_CENTER}{
+                  #{EDOMUtility.vP}align-content:center;
+                  #{EDOMUtility.vP}justify-content:center;
+                }
+              .#{@CSS_FLEX_H}{ #{EDOMUtility.vP}flex-direction: row }
+              .#{@CSS_FLEX_V}{ #{EDOMUtility.vP}flex-direction: column }
+             "
+    else if @canUseFlex
       css += ".#{@CSS_FLEX_H},.#{@CSS_FLEX_V} { 
                 display: flex;
                 }
               .#{@CSS_CONTENT_ALIGN_CENTER}{
                   align-items:center;
+                }
+              .#{@CSS_FLEX_H}.#{@CSS_CONTENT_ALIGN_CENTER}{
+                  justify-content:center;
                 }
               .#{@CSS_CONTENT_LOCATE_CENTER}{
                   align-content:center;
@@ -75,7 +84,7 @@ class @ECSSUtility extends EObject
               .#{@CSS_FLEX_H}{ flex-direction: row }
               .#{@CSS_FLEX_V}{ flex-direction: column }
              "
-    else if !EDOMUtility.hasOwnProperty("#{EDOMUtility.vBrowserType}BoxFlex",document.createElement("div").style) #ignoring flexbox
+    else if EDOMUtility.hasOwnProperty("#{EDOMUtility.vBrowserType}BoxFlex",document.createElement("div").style) #ignoring flexbox
       css += ".#{@CSS_FLEX_H},.#{@CSS_FLEX_V} { 
                 display: #{EDOMUtility.vP}box;
                }
@@ -83,6 +92,10 @@ class @ECSSUtility extends EObject
                 #{EDOMUtility.vP}box-align:center;
                 box-align:center;
                }
+              .#{@CSS_FLEX_H}.#{@CSS_CONTENT_ALIGN_CENTER}{
+                  #{EDOMUtility.vP}box-pack:center;
+                  box-pack:center
+                }
               .#{@CSS_CONTENT_LOCATE_CENTER}{
                 flex-align-pack:center;
                 #{EDOMUtility.vP}box-pack:center;
@@ -99,6 +112,10 @@ class @ECSSUtility extends EObject
               .#{@CSS_CONTENT_ALIGN_CENTER}{
                 #{EDOMUtility.vP}flex-pack: center;
                 }
+              .#{@CSS_FLEX_H}.#{@CSS_CONTENT_ALIGN_CENTER}{
+                  #{EDOMUtility.vP}box-pack:center;
+                  box-pack:center
+                }
               .#{@CSS_CONTENT_LOCATE_CENTER}{
                 flex-align-pack:center;
                 #{EDOMUtility.vP}box-pack:center;
@@ -110,6 +127,10 @@ class @ECSSUtility extends EObject
     css
     
 ECSSUtility.normalizeCSS()
+
+
+
+
 
 
 
